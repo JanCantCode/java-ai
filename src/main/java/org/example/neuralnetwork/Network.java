@@ -21,6 +21,11 @@ public class Network {
         return this.layers[this.layers.length-1].getOutputs();
     }
 
+    public double[] predict(double[] input) {
+        this.setInputData(input);
+        return feed();
+    }
+
     public void setInputData(double[] inputs) {
         this.inputLayer = inputs;
     }
@@ -31,5 +36,57 @@ public class Network {
 
     public Layer[] getLayers() {
         return this.layers;
+    }
+
+    public void backwardsPropagation(double[] expected, double learningRate) {
+        Layer outPutlayer = this.layers[this.layers.length-1];
+
+        outPutlayer.setOutputError(expected);
+
+        for (int i = this.layers.length-2; i >= 0; i--) {
+            Layer currentLayer = this.layers[i];
+            Layer nextLayer = this.layers[i+1];
+
+            currentLayer.calculateError(expected, nextLayer);
+
+            for (Node node : currentLayer.getNodes()) {
+                node.updateWeights(learningRate, this.layers[i+1]);
+            }
+        }
+    }
+
+    public void train(double[][] inputs, double[][] expectedOutputs, int epochs, double learningRate) {
+        for (int i = 0; i < epochs; i++) {
+            double error = 0;
+            for (int j = 0; j < inputs.length; j++) {
+
+                double[] output = predict(inputs[j]);
+
+
+                double[] expected = expectedOutputs[j];
+
+                for (int k = 0; k < output.length; k++) {
+                    error += Math.pow(expected[k]-output[k], 2);
+                }
+
+                backwardsPropagation(expected, learningRate);
+
+                updateWeights(learningRate);
+
+            }
+            error /= inputs.length;
+            System.out.println("Epoch "+(i+1)+" Error: "+error);
+        }
+    }
+
+    public void updateWeights(double learningRate) {
+        for (int i = this.layers.length-1; i > 0; i--) {
+            Layer currentLayer = this.layers[i];
+            Layer previousLayer = this.layers[i-1];
+
+            for (Node node : currentLayer.getNodes()) {
+                node.updateWeights(learningRate, previousLayer);
+            }
+        }
     }
 }
