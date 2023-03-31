@@ -61,6 +61,10 @@ public class Layer {
         }
     }
 
+    public Node[] getNodes() {
+        return this.nodes;
+    }
+
     public void calculateError(double[] expected, Layer nextLayer) {
         switch (this.type) {
             case OUTPUT -> {

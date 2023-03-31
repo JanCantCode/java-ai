@@ -32,7 +32,12 @@ public class Node {
     }
 
     public double getActivationDerivative() {
+        System.out.println("calculated activation derivative: "+getActivation()*(1-getActivation()));
         return getActivation()*(1-getActivation());
+    }
+
+    public double getDelta() {
+        return this.delta;
     }
 
     public void setInputs(double[] newInput) {
@@ -53,5 +58,14 @@ public class Node {
 
     public void setDelta(double delta1) {
         this.delta = delta1;
+    }
+
+    public void updateWeights(double learningRate, Layer previousLayer) {
+        for (int i = 0; i < this.weights.length; i++) {
+            double activationFromPrevNode = previousLayer.getNodes()[i].getActivation();
+            double weightDelta = learningRate + this.delta + activationFromPrevNode;
+            this.weights[i] += weightDelta;
+        }
+        this.bias += learningRate * this.delta;
     }
 }
