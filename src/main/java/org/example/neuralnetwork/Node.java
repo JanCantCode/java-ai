@@ -68,4 +68,8 @@ public class Node {
         }
         this.bias += learningRate * this.delta;
     }
+
+    public double getBias() {
+        return bias;
+    }
 }

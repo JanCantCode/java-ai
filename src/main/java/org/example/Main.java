@@ -34,15 +34,21 @@ public class Main {
 
         double[][] formattedInput = TrainingHelper.toOneNeuronInput(trainingInput);
         double[][] formattedExpected = TrainingHelper.toOneNeuronInput(expectedOutput);
-        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{100.0})));
-        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{5.0})));
-        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{6.0})));
+        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{0.1})));
+        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{0.7})));
+        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{0.9})));
 
         neuralNetwork.train(formattedInput, formattedExpected, 10, 0.5);
 
-        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{100.0})));
-        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{5.0})));
-        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{6.0})));
+        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{0.1})));
+        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{0.7})));
+        System.out.println(Arrays.toString(neuralNetwork.predict(new double[]{0.9})));
+
+        for (Layer layer : neuralNetwork.getLayers()) {
+            for (Node node : layer.getNodes()) {
+                System.out.println(node.getBias());
+            }
+        }
 
     }
 }
